@@ -20,7 +20,7 @@ def main():  # pragma: no cover
     data_face = read_data("dataset/GENKI-R2009a/Subsets/GENKI-SZSL", "dataset/GENKI-R2009a/Subsets/GENKI-SZSL/GENKI-SZSL_labels.txt", 'f')
     
     #visualize data
-    plotting.plot_smile(data_smile)
+    #plotting.plot_smile(data_smile)
     plotting.plot_face(data_face)
     
     #split dataset here or in training? always use set seeds 
