@@ -16,6 +16,7 @@ def plot_smile(data_smile):
     plt.show()
 
 #fixes cordinates for box drawning
+#objects x, y and z are tensors not numbers, that's why use of tf methods
 def fix_cord(x, y, sz):
     sz = tf.math.divide(sz, 2)
     sz = tf.cast(sz, dtype=tf.int32)

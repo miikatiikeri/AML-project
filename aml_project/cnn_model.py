@@ -35,5 +35,5 @@
 #    'Plots','training-progress');
 
 
-# TODO: TRAIN YOUR NETWORK
+# TTRAIN YOUR NETWORK
 #net = trainNetwork(imdsTrain,layers,options);
