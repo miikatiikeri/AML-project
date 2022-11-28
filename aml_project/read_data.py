@@ -9,9 +9,11 @@ def read_labels(y_path, type, sz):
     y = list()
     #read labels
     data = open(y_path, 'r').read().splitlines()
+    #read smile labels
     if(type == 's'):
         for d in data:
             y.append(int(d.split(" ")[0]))
+    #read face labels
     elif(type == 'f'):
         for d in data:
             y.append([int(d.split(" ")[0]), int(d.split(" ")[1]), int(d.split(" ")[2])])
@@ -35,7 +37,7 @@ def fix_labels(labels, new_size):
 
 
 
-def read_data(X_path, y_path, type, new_size):
+def read_data(X_path, y_path, type, new_size, normalize):
     y = read_labels(y_path, type, new_size)
     data = keras.utils.image_dataset_from_directory(
         X_path,
@@ -53,4 +55,9 @@ def read_data(X_path, y_path, type, new_size):
         follow_links = False,
         crop_to_aspect_ratio = False
     )  
+    #normalize images
+    if(normalize):
+        for images, labels in data:
+            for im in images:
+                im = tf.image.per_image_standardization(im)
     return data 

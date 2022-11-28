@@ -12,21 +12,25 @@ import plotting;
 #determines the size that images get scaled in read_data
 #labels also get scaled accordingly
 scaled_size = 180
+#Normalizing images takes some time, set this to true when training model, otherwise keep false
+normalize = False
 
 def main():  # pragma: no cover  
     
     #read data and labels s for smile, f for face
     #data_smile contains images and labels, labels are in array where N:th label corresponds to N:th image
     #1 = smiling, 0 = not smiling
-    data_smile = read_data("dataset/GENKI-R2009a/Subsets/GENKI-4K", "dataset/GENKI-R2009a/Subsets/GENKI-4K/GENKI-4K_Labels.txt", 's', scaled_size)
+    data_smile = read_data("dataset/GENKI-R2009a/Subsets/GENKI-4K", "dataset/GENKI-R2009a/Subsets/GENKI-4K/GENKI-4K_Labels.txt", 's', scaled_size, normalize)
     #data_face contains images and labels, labels are in array where N:th label corresponds to N:th image
     #each indice in labels contains subarray where l[i][0] = x cordinate of center of face, l[i][1] = y cordinate of center of face, l[i][2] = box size
-    data_face = read_data("dataset/GENKI-R2009a/Subsets/GENKI-SZSL", "dataset/GENKI-R2009a/Subsets/GENKI-SZSL/GENKI-SZSL_labels.txt", 'f', scaled_size)
-    
-    #visualize data
-    plotting.plot_smile(data_smile)
-    plotting.plot_face(data_face)
+    data_face = read_data("dataset/GENKI-R2009a/Subsets/GENKI-SZSL", "dataset/GENKI-R2009a/Subsets/GENKI-SZSL/GENKI-SZSL_labels.txt", 'f', scaled_size, normalize)
+    #normalize images
 
+
+    #visualize data
+    #plotting.plot_pixels(data_smile)
+    #plotting.plot_smile(data_smile)
+    #plotting.plot_face(data_face)
     
     #split dataset here or in training? always use set seeds 
     train_ds, test_ds = tf.keras.utils.split_dataset(
