@@ -4,9 +4,8 @@ import os
 import cv2 as cv
 from pathlib import Path
 
-new_size = 180
 
-def read_labels(y_path, type):
+def read_labels(y_path, type, sz):
     y = list()
     #read labels
     data = open(y_path, 'r').read().splitlines()
@@ -16,11 +15,11 @@ def read_labels(y_path, type):
     elif(type == 'f'):
         for d in data:
             y.append([int(d.split(" ")[0]), int(d.split(" ")[1]), int(d.split(" ")[2])])
-            fix_labels(y)
+        fix_labels(y, sz)
     return y
 
 #fixes the label scaling
-def fix_labels(labels):
+def fix_labels(labels, new_size):
     dir = "dataset/GENKI-R2009a/Subsets/GENKI-SZSL/files/"
     i = 0
     for image in sorted(os.listdir(dir)):
@@ -36,8 +35,8 @@ def fix_labels(labels):
 
 
 
-def read_data(X_path, y_path, type):
-    y = read_labels(y_path, type)
+def read_data(X_path, y_path, type, new_size):
+    y = read_labels(y_path, type, new_size)
     data = keras.utils.image_dataset_from_directory(
         X_path,
         labels = y,
