@@ -5,7 +5,7 @@ import tensorflow as tf
 
 
 #project imports
-from read_data import read_data
+from read_data import read_data, read_labels
 import plotting;
 
 #global variables
@@ -26,12 +26,46 @@ def main():  # pragma: no cover
     #visualize data
     plotting.plot_smile(data_smile)
     plotting.plot_face(data_face)
+
     
     #split dataset here or in training? always use set seeds 
+    train_ds, test_ds = tf.keras.utils.split_dataset(
+        data_face, left_size=0.8, seed=1
+    )
+    
+    print(train_ds)
+    print(test_ds)
+
+    # TODO read labels and split them accordingly
+    read_labels()
+    train_labels, test_labels = tf.keras.utils.split_dataset(
+
+    )
 
     #train model and save it
+    model = tf.keras.Sequential([
+        tf.keras.layers.Conv2D(32, (3, 3), activation='relu', input_shape=(32, 32, 3)),
+        tf.keras.layers.MaxPooling2D((2, 2)),
+        tf.keras.layers.Conv2D(64, (3, 3), activation='relu'),
+        tf.keras.layers.MaxPooling2D((2, 2)),
+        tf.keras.layers.Conv2D(64, (3, 3), activation='relu'),
+        tf.keras.layers.Flatten(),
+        tf.keras.layers.Dense(64, activation='relu'),
+        tf.keras.layers.Dense(10)
+    ])
 
+    model.compile(
+        optimizer='adam',
+        loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),
+        metrics=['accuracy']
+    )
+
+    history = model.fit(train_ds, train_labels, epochs=10,
+                        validation_data=(test_ds, test_labels))
+
+    model.summary()
     #load model
+
 
     #predict test data
 
