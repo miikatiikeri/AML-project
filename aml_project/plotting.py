@@ -59,3 +59,11 @@ def plot_face(data_face):
 
     plt.show()
 
+def ev_model(face):
+    plt.plot(face.face['accuracy'], label='accuracy')
+    plt.plot(face.face['val_accuracy'], label='val_accuracy')
+    plt.xlabel('Epoch')
+    plt.ylabel('Accuracy')
+    plt.ylim([0.5, 1])
+    plt.legend(loc='lower right')
+    plt.show()
