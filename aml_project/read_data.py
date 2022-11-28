@@ -16,21 +16,21 @@ def read_labels(y_path, type):
     elif(type == 'f'):
         for d in data:
             y.append([int(d.split(" ")[0]), int(d.split(" ")[1]), int(d.split(" ")[2])])
-        #uncomment to scale labels, needs some bug fixing
-        #fix_labels(y)
+            fix_labels(y)
     return y
 
+#fixes the label scaling
 def fix_labels(labels):
     dir = "dataset/GENKI-R2009a/Subsets/GENKI-SZSL/files/"
     i = 0
-    for image in os.listdir(dir):
+    for image in sorted(os.listdir(dir)):
         im = cv.imread(os.path.join(dir, image))
         dimensions = im.shape
-        y_ratio = new_size / dimensions[0]
-        x_ratio = new_size / dimensions[1]
-        box_ratio = (x_ratio + y_ratio) / 2
-        labels[i][0] = int(labels[i][0] * x_ratio)
-        labels[i][1] = int(labels[i][1] * y_ratio)
+        x_ratio = labels[i][0] / dimensions[0]
+        y_ratio = labels[i][1] / dimensions[1]
+        box_ratio = ((new_size / dimensions[0]) + (new_size / dimensions[1])) / 2
+        labels[i][0] = int(new_size * x_ratio)
+        labels[i][1] = int(new_size * y_ratio)
         labels[i][2] = int(labels[i][2] * box_ratio)
         i = i + 1
 
