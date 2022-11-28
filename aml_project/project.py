@@ -9,6 +9,8 @@ from read_data import read_data
 import plotting;
 
 #global variables
+#determines the size that images get scaled in read_data
+#labels also get scaled accordingly
 scaled_size = 180
 
 def main():  # pragma: no cover  
