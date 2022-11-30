@@ -3,6 +3,7 @@ from matplotlib.patches import Rectangle
 import tensorflow as tf
 import cv2 as cv
 
+
 def plot_smile(data_smile):
     plt.figure(figsize=(10, 10))
     plt.suptitle("Example of Genki-4k dataset")
