@@ -42,6 +42,7 @@ import tensorflow as tf
 from tensorflow import keras
 from read_data import read_data, read_labels
 from plotting import ev_model
+from keras import datasets, layers, models
 
 def split_data(data):
     train_ds, test_ds = tf.keras.utils.split_dataset(
@@ -49,52 +50,57 @@ def split_data(data):
         )
     return train_ds, test_ds
 
+# def extract(dataset):
+#     images = list()
+#     labels = list()
+#     for i, l in dataset:
+#         images.append(i)
+#         labels.append(l)
+#     return images, labels
+
+
 def model(train_ds, test_ds, train_smile_ds, test_smile_ds):
-    # read labels for face and smile
-    labels_face = read_labels("dataset/GENKI-R2009a/Subsets/GENKI-4K/GENKI-4K_Labels.txt", "f")
-    labels_smile = read_labels("dataset/GENKI-R2009a/Subsets/GENKI-SZSL/GENKI-SZSL_labels.txt", "s")
-
-    # split face labels
-    train_labels, test_labels = tf.keras.utils.split_dataset(
-        labels_face, left_size=0.8, seed=1
-    )   
-
-    # split smile labels
-    train_smile_labels, test_smile_labels = tf.keras.utils.split_dataset(
-        labels_smile, left_size=0.8, seed=1
-    )
-
-    # train model and save it
+    # model structure
+    # model = models.Sequential()
+    # model.add(layers.Conv2D(32, 3, activation='relu'))
+    # model.add(layers.MaxPooling2D())
+    # model.add(layers.Conv2D(32, 3, activation='relu'))
+    # model.add(layers.MaxPooling2D())
+    # model.add(layers.Conv2D(32, 3, activation='relu'))
+    # model.add(layers.MaxPooling2D())
+    # model.add(layers.Flatten())
+    # model.add(layers.Dense(128, activation='relu'))
+    # model.add(layers.Dense(2))
+    
+    num_classes = 2
     model = tf.keras.Sequential([
-        tf.keras.layers.Conv2D(32, (3, 3), activation='relu', input_shape=(32, 32, 3)),
-        tf.keras.layers.MaxPooling2D((2, 2)),
-        tf.keras.layers.Conv2D(64, (3, 3), activation='relu'),
-        tf.keras.layers.MaxPooling2D((2, 2)),
-        tf.keras.layers.Conv2D(64, (3, 3), activation='relu'),
+        tf.keras.layers.Conv2D(32, 3, activation='relu'),
+        tf.keras.layers.MaxPooling2D(),
+        tf.keras.layers.Conv2D(32, 3, activation='relu'),
+        tf.keras.layers.MaxPooling2D(),
+        tf.keras.layers.Conv2D(32, 3, activation='relu'),
+        tf.keras.layers.MaxPooling2D(),
         tf.keras.layers.Flatten(),
-        tf.keras.layers.Dense(64, activation='relu'),
-        tf.keras.layers.Dense(10)
+        tf.keras.layers.Dense(128, activation='relu'),
+        tf.keras.layers.Dense(num_classes)
     ])
 
+   
+
+    #compile model
+    model.compile(optimizer='adam',
+              loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),
+              metrics=['accuracy'])
+
     # model summary
-    model.summary()
+    #model.summary()
 
-    # compile model
-    model.compile(
-        optimizer='adam',
-        loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),
-        metrics=['accuracy']
-    )
+    #extract images and labels from dataset
+    #train_images, train_labels = extract(train_ds)
+    #test_images, test_labels = extract(test_ds)
 
-    # train model with face data
-    face = model.fit(train_ds, train_labels, epochs=10,
-                 validation_data=(test_ds, test_labels))
-
-    """
-    smile = model.fit(train_smile_ds, train_smile_labels, epochs=10,
-                    validation_data=(test_smile_ds, test_smile_labels))
-    """
-
-    # evaluate the model
-    ev_model(face)
-    test_loss, test_acc = model.evaluate(test_ds, test_labels, verbose=2)
+    #train model
+    model.fit(train_smile_ds, 
+                    validation_data=(test_smile_ds), epochs = 3)
+    
+    model.save("cnn_model")
