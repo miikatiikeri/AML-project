@@ -2,7 +2,6 @@ import tensorflow as tf
 from tensorflow import keras
 import os
 import cv2 as cv
-from pathlib import Path
 
 
 def read_labels(y_path, type, sz):
@@ -39,6 +38,7 @@ def fix_labels(labels, new_size):
 
 def read_data(X_path, y_path, type, new_size, normalize):
     y = read_labels(y_path, type, new_size)
+    X = list()
     data = keras.utils.image_dataset_from_directory(
         X_path,
         labels = y,
@@ -50,7 +50,6 @@ def read_data(X_path, y_path, type, new_size, normalize):
         shuffle = True,
         seed = 1,
         validation_split = None,
-        subset = None,
         interpolation = 'bilinear',
         follow_links = False,
         crop_to_aspect_ratio = False
