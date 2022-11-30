@@ -21,7 +21,7 @@ def read_labels(y_path, type, sz):
 
 #fixes the label scaling
 def fix_labels(labels, new_size):
-    dir = "dataset/GENKI-R2009a/Subsets/GENKI-SZSL/files/"
+    dir = "../dataset/GENKI-R2009a/Subsets/GENKI-SZSL/files/"
     i = 0
     for image in sorted(os.listdir(dir)):
         im = cv.imread(os.path.join(dir, image))
