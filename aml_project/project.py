@@ -14,6 +14,8 @@ import cnn_model
 scaled_size = 32
 # Normalizing images takes some time, set this to true when training model, otherwise keep false
 normalize = True
+# number of epochs for training, set higher when actually training model
+n_epochs = 3
 
 
 def main():  # pragma: no cover
@@ -21,13 +23,12 @@ def main():  # pragma: no cover
     # read data and labels s for smile, f for face
     # data_smile contains images and labels, labels are in array where N:th label corresponds to N:th image
     # 1 = smiling, 0 = not smiling
-    data_smile = read_data("../dataset/GENKI-R2009a/Subsets/GENKI-4K",
-                           "../dataset/GENKI-R2009a/Subsets/GENKI-4K/GENKI-4K_Labels.txt", 's', scaled_size, normalize)
+    data_smile = read_data("dataset/GENKI-R2009a/Subsets/GENKI-4K",
+                           "dataset/GENKI-R2009a/Subsets/GENKI-4K/GENKI-4K_Labels.txt", 's', scaled_size, normalize)
     # data_face contains images and labels, labels are in array where N:th label corresponds to N:th image
     # each indice in labels contains subarray where l[i][0] = x cordinate of center of face, l[i][1] = y cordinate of center of face, l[i][2] = box size
-    data_face = read_data("../dataset/GENKI-R2009a/Subsets/GENKI-SZSL",
-                          "../dataset/GENKI-R2009a/Subsets/GENKI-SZSL/GENKI-SZSL_labels.txt", 'f', scaled_size, normalize)
-    # normalize images
+    data_face = read_data("dataset/GENKI-R2009a/Subsets/GENKI-SZSL",
+                          "dataset/GENKI-R2009a/Subsets/GENKI-SZSL/GENKI-SZSL_labels.txt", 'f', scaled_size, normalize)
 
     # visualize data
     #plotting.plot_pixels(data_smile)
@@ -39,32 +40,19 @@ def main():  # pragma: no cover
     train_ds, test_ds = cnn_model.split_data(data_face)
     train_smile_ds, test_smile_ds = cnn_model.split_data(data_smile)
    
-    # all model code is here
-    cnn_model.model(train_ds, test_ds, train_smile_ds, test_smile_ds)
-    
+    # smile detection model
+    #cnn_model.smile_model(train_smile_ds, test_smile_ds, n_epochs)
     # load model
-    model = keras.models.load_model("cnn_model", compile=True)
+    #smile_model = keras.models.load_model("smile_model", compile=True)
 
+    #multi task model
+    cnn_model.multi_task_model(train_ds, test_ds, train_smile_ds, test_smile_ds)
     # predict test data
     print(test_ds)
     print(test_smile_ds)
 
-    # TODO fix predicting
-    prediction_face = model.predict(test_ds)
-    prediction_smile = model.predict(test_smile_ds)
-
-    score_face = tf.nn.softmax(prediction_face[0])
-    score_smile = tf.nn.softmax(prediction_smile[0])
-
-    print(
-    "This image most likely belongs to {} with a {:.2f} percent confidence."
-    .format(class_names[np.argmax(score_face)], 100 * np.max(score_face))
-    )
-
-    print(
-    "This image most likely belongs to {} with a {:.2f} percent confidence."
-    .format(class_names[np.argmax(score_smile)], 100 * np.max(score_smile))
-    )
+    #predict code here
+    #cnn_model.predict(model, test_ds, test_smile_ds)
     
     # visualize results
 
