@@ -46,7 +46,7 @@ def main():  # pragma: no cover
     #smile_model = keras.models.load_model("smile_model", compile=True)
 
     #multi task model
-    cnn_model.multi_task_model(train_ds, test_ds, train_smile_ds, test_smile_ds)
+    cnn_model.multi_task_model(train_ds, test_ds, train_smile_ds, test_smile_ds, scaled_size,n_epochs)
     # predict test data
     print(test_ds)
     print(test_smile_ds)
