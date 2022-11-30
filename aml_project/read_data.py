@@ -59,5 +59,5 @@ def read_data(X_path, y_path, type, new_size, normalize):
     if(normalize):
         for images, labels in data:
             for im in images:
-                im = tf.image.per_image_standardization(im)
+                im = im /255
     return data 

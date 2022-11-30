@@ -36,7 +36,7 @@ def plot_pixels(data):
             fig1 = axs[i,0].matshow(im_gray, cmap = 'rainbow')
             axs[i,0].axis("off")
             fig.colorbar(fig1, ax = axs[i,0])
-            new_im = tf.image.per_image_standardization(images[i]).numpy().astype("float32")
+            new_im = images[i].numpy().astype("float32") / 255.0
             new_im_gray = cv.cvtColor(new_im, cv.COLOR_BGR2GRAY)
             fig2 = axs[i,1].matshow(new_im_gray, cmap = 'rainbow')
             axs[i,1].axis("off")

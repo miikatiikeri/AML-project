@@ -13,7 +13,7 @@ import cnn_model
 # labels also get scaled accordingly
 scaled_size = 180
 # Normalizing images takes some time, set this to true when training model, otherwise keep false
-normalize = False
+normalize = True
 
 
 def main():  # pragma: no cover
@@ -30,18 +30,18 @@ def main():  # pragma: no cover
     # normalize images
 
     # visualize data
-    # plotting.plot_pixels(data_smile)
+    #plotting.plot_pixels(data_smile)
     # plotting.plot_smile(data_smile)
     # plotting.plot_face(data_face)
 
     # split dataset here or in training? always use set seeds
     # moved data splitting to different function in cnn_model
-    train_ds, test_ds = cnn_model.split_data(data_face)
+    #train_ds, test_ds = cnn_model.split_data(data_face)
     train_smile_ds, test_smile_ds = cnn_model.split_data(data_smile)
-    print(train_ds)
-    print(test_ds)
+    #print(train_ds)
+    #print(test_ds)
     # all model code is here
-    cnn_model.model(train_ds, test_ds, train_smile_ds, test_smile_ds)
+    #cnn_model.model(train_ds, test_ds, train_smile_ds, test_smile_ds)
     
     # load model
 
