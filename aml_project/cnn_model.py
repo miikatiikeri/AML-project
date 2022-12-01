@@ -50,7 +50,7 @@ def smile_model(train_smile_ds, test_smile_ds, n_epochs):
     
     model.save("smile_model")
 
-def multi_task_model(face_train, face_test, smile_train, smile_test, sz, n):
+def multi_task_model(face_train, face_test, smile_train, smile_test, sz, n_epochs):
 
     input_shape = (sz,sz,3)
     input_layer = keras.layers.Input(input_shape)
@@ -71,7 +71,7 @@ def multi_task_model(face_train, face_test, smile_train, smile_test, sz, n):
     face_model = keras.layers.Dense(128, activation = 'relu', name = 'fm1')(base_model)
     face_model = keras.layers.Dense(64, activation = 'relu', name = 'fm2')(face_model)
     face_model = keras.layers.Dense(32, activation = 'relu', name = 'fm3')(face_model)
-    face_model = keras.layers.Dense(3, activation = 'sigmoid', name = 'fm_head')
+    face_model = keras.layers.Dense(3, activation = 'sigmoid', name = 'fm_head')(face_model)
 
     model = keras.Model(input_layer, outputs=[smile_model, face_model])
 
@@ -89,4 +89,7 @@ def multi_task_model(face_train, face_test, smile_train, smile_test, sz, n):
         'fm_head': face_test
     }
 
-    model.fit(train_sets, validation_data = test_sets, epochs = n)
+    history = model.fit(smile_train, face_train, validation_data = smile_test, face_test, batch_size = 4, epochs = n_epochs, shuffle = True, verbose = 1)
+    #history = model.fit(train_sets, validation_data = test_sets, batch_size = 4, epochs = n_epochs, shuffle = True, verbose = 1)
+
+

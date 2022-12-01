@@ -2,7 +2,7 @@ import tensorflow as tf
 from tensorflow import keras
 import os
 import cv2 as cv
-
+import platform
 
 def read_labels(y_path, type, sz):
     y = list()
@@ -21,7 +21,11 @@ def read_labels(y_path, type, sz):
 
 #fixes the label scaling
 def fix_labels(labels, new_size):
-    dir = "dataset/GENKI-R2009a/Subsets/GENKI-SZSL/files/"
+    if platform.system() == "Linux" or "Darwin":
+        dir = "../dataset/GENKI-R2009a/Subsets/GENKI-SZSL/files/"
+    else:
+        dir = "dataset/GENKI-R2009a/Subsets/GENKI-SZSL/files/"
+
     i = 0
     for image in sorted(os.listdir(dir)):
         im = cv.imread(os.path.join(dir, image))
