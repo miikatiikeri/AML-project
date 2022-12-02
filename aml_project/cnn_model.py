@@ -89,7 +89,7 @@ def multi_task_model(face_train, face_test, smile_train, smile_test, sz, n_epoch
         'fm_head': face_test
     }
 
-    history = model.fit(smile_train, face_train, validation_data = smile_test, face_test, batch_size = 4, epochs = n_epochs, shuffle = True, verbose = 1)
+    #history = model.fit(smile_train, face_train, validation_data = smile_test, face_test, batch_size = 4, epochs = n_epochs, shuffle = True, verbose = 1)
     #history = model.fit(train_sets, validation_data = test_sets, batch_size = 4, epochs = n_epochs, shuffle = True, verbose = 1)
 
 
