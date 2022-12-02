@@ -1,6 +1,10 @@
 import tensorflow as tf
 from tensorflow import keras
 import numpy as np
+from tensorflow import keras
+from tensorflow.keras import layers
+from tensorflow.keras.models import Sequential
+
 
 
 def split_data(data):
@@ -10,7 +14,7 @@ def split_data(data):
     test_ds = data[split_index+1:]
     return train_ds, test_ds
 
-def predict(model, test_ds, test_smile_ds):
+def predict(model, image):
     # TODO fix predicting
     prediction_face = model.predict(test_ds)
     prediction_smile = model.predict(test_smile_ds)
@@ -31,8 +35,7 @@ def predict(model, test_ds, test_smile_ds):
 
 def multi_task_model(images_train, images_test, face_train, face_test, smile_train, smile_test, scaled_size, n_epochs):
 
-    input_shape = (scaled_size,scaled_size, 1)
-    input_layer = keras.layers.Input(input_shape)
+    input_layer = keras.layers.Input(shape=(scaled_size, scaled_size, 3))
     
     base_model = keras.layers.experimental.preprocessing.Rescaling(1./255, name='bm1')(input_layer)
     base_model = keras.layers.Conv2D(16, 3, padding='same', activation='relu', name='bm2')(base_model)
@@ -51,12 +54,12 @@ def multi_task_model(images_train, images_test, face_train, face_test, smile_tra
     face_model = keras.layers.Dense(128, activation = 'relu', name = 'fm1')(base_model)
     face_model = keras.layers.Dense(64, activation = 'relu', name = 'fm2')(face_model)
     face_model = keras.layers.Dense(32, activation = 'relu', name = 'fm3')(face_model)
-    face_model = keras.layers.Dense(3, activation = 'sigmoid', name = 'fm_head')(face_model)
+    face_model = keras.layers.Dense(4, name = 'fm_head')(face_model)
 
     model = keras.Model(input_layer, outputs=[smile_model, face_model])
 
 
-    losses = {"sm_head":tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True), "fm_head":tf.keras.losses.MSE}
+    losses = {"sm_head": keras.losses.SparseCategoricalCrossentropy(from_logits=True), "fm_head": keras.losses.MSE}
 
     model.compile(loss = losses, optimizer = 'Adam', metrics=['accuracy'])
 
@@ -69,6 +72,6 @@ def multi_task_model(images_train, images_test, face_train, face_test, smile_tra
         "fm_head": face_test
     }
 
-    model.fit(images_train, trainTargets, validation_data = (images_test, testTargets), batch_size = 4, epochs = n_epochs, shuffle = True, verbose = 1)
+    model.fit(images_train, trainTargets, validation_data = (images_test, testTargets), epochs = n_epochs, shuffle = True, verbose = 1)
     model.save("cnn_model")
 

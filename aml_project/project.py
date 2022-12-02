@@ -16,7 +16,7 @@ scaled_size = 180
 # Normalizing images takes some time, set this to true when training model, otherwise keep false
 normalize = True
 # number of epochs for training, set higher when actually training model
-n_epochs = 3
+n_epochs = 1
 # quick fix for dataread
 user = True
 
@@ -29,7 +29,7 @@ def main():  # pragma: no cover
       images, face_labels, smile_labels = read_data(
                         "../dataset/GENKI-R2009a/Subsets/GENKI-SZSL/GENKI-SZSL_labels.txt",
                         "../dataset/GENKI-R2009a/Subsets/GENKI-SZSL/smile_labels.txt",
-                        scaled_size, normalize, user)
+                        scaled_size, user)
     else:
       print("using windows read")
       # read data and labels s for smile, f for face
@@ -37,27 +37,29 @@ def main():  # pragma: no cover
       # 1 = smiling, 0 = not smiling
       # face_labels contains images and labels, labels are in array where N:th label corresponds to N:th image
       # each indice in labels contains subarray where l[i][0] = x cordinate of center of face, l[i][1] = y cordinate of center of face, l[i][2] = box size
-      images, face_labels, smile_labels = read_data(
+      images, images_original, face_labels, smile_labels = read_data(
                         "dataset/GENKI-R2009a/Subsets/GENKI-SZSL/GENKI-SZSL_labels.txt",
                         "dataset/GENKI-R2009a/Subsets/GENKI-SZSL/smile_labels.txt", 
-                        scaled_size, normalize, user)
+                        scaled_size, user)
     
     # visualize data
     #plotting.plot_pixels(images)
     #plotting.plot_face(images, face_labels, smile_labels)
-
+   
     #split data
     images_train, images_test = cnn_model.split_data(images)
     face_train, face_test = cnn_model.split_data(face_labels)
     smile_train, smile_test = cnn_model.split_data(smile_labels)
-   
-    # smile detection model
-    #cnn_model.smile_model(train_smile_ds, test_smile_ds, n_epochs)
-    # load model
-    #smile_model = keras.models.load_model("smile_model", compile=True)
-
     #multi task model
     cnn_model.multi_task_model(images_train, images_test, face_train, face_test, smile_train, smile_test, scaled_size, n_epochs)
+    #load model
+    model = keras.models.load_model("cnn_model", compile=True)
+    img_array = tf.expand_dims(images_original[3000],0)
+    predict = model.predict(img_array)
+    plt.imshow(images_original[3000])
+    plt.show()
+    print(predict)
+
     # predict test data
     #print(test_ds)
     #print(test_smile_ds)
