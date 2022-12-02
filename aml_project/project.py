@@ -9,21 +9,18 @@ from read_data import read_data
 import plotting
 import cnn_model
 
-# global variables
-# determines the size that images get scaled in read_data
-# labels also get scaled accordingly
+'global variables'
+'determines size that images scale to'
 scaled_size = 180
-# Normalizing images takes some time, set this to true when training model, otherwise keep false
-normalize = True
-# number of epochs for training, set higher when actually training model
+'number of epoch for training the model'
 n_epochs = 100
-# quick fix for dataread
+'quick fix for dataread'
 user = True
 
 
 def main():  # pragma: no cover
 
-    #platform detection to fix read issues between os
+    'platform detection to fix read issues between os'
     if (platform.system() == "Linux" or "Darwin") and user != True:
       print("using unix read")
       images, face_labels, smile_labels = read_data(
@@ -42,17 +39,19 @@ def main():  # pragma: no cover
                         "dataset/GENKI-R2009a/Subsets/GENKI-SZSL/smile_labels.txt", 
                         scaled_size, user)
     
-    # visualize data
+    'visualize data, uncomment to plot'
     #plotting.plot_pixels(images)
     #plotting.plot_face(images, face_labels, smile_labels)
    
-    #split data
+    'split data to train and test sets'
     images_train, images_test = cnn_model.split_data(images)
     face_train, face_test = cnn_model.split_data(face_labels)
     smile_train, smile_test = cnn_model.split_data(smile_labels)
-    #multi task model
+
+    'uncomment to train multitask model'
     #cnn_model.multi_task_model(images_train, images_test, face_train, face_test, smile_train, smile_test, scaled_size, n_epochs)
-    #load model
+    
+    'load saved model'
     model = keras.models.load_model("cnn_model", compile=True)
   
 

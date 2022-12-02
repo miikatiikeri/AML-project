@@ -6,19 +6,18 @@ import platform
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.patches import Rectangle
-from plotting import fix_cord
 
+'''reads labels
+type = s reads smile labels
+type = f reads face labels'''
 def read_labels(y_path, type):
-    #read labels
     data = open(y_path, 'r').read().splitlines()
-    #read smile labels
     i = 0
     if(type == 's'):
         y = []
         for d in data:
             y.append(int(d.split(" ")[0]))
             i = i+1
-    #read face labels
     elif(type == 'f'):
         y = []
         for d in data:
@@ -26,7 +25,7 @@ def read_labels(y_path, type):
             i = i+1
     return np.array(y)
 
-#fixes the label scaling
+'''fixes face label locations to match new image size'''
 def fix_labels(labels, scaled_size, user):
     if (platform.system() == "Linux" or "Darwin") and user != True:
         dir = "../dataset/GENKI-R2009a/Subsets/GENKI-SZSL/files/"
@@ -45,6 +44,8 @@ def fix_labels(labels, scaled_size, user):
         i = i + 1
     return labels
 
+'''calculates xmin, xmax, ymin, ymax
+from face labels'''
 def transform_labels(labels):
     new_labels = []
     for i in labels:
@@ -55,9 +56,11 @@ def transform_labels(labels):
         new_labels.append((xmin, xmax, ymin, ymax))
     return np.asarray(new_labels)
 
+'''reads images to np array
+type = b reads boxed images
+type = o reads original images'''
 def read_images(user, scaled_size, type):
     images = []
-    
     if (platform.system() == "Linux" or "Darwin") and user != True:
         if(type == 'b'):
             dir = "../dataset/GENKI-R2009a/box_images/"
@@ -71,11 +74,12 @@ def read_images(user, scaled_size, type):
     for i in sorted(os.listdir(dir)):
         img = cv.imread(os.path.join(dir, i))
         img = cv.resize(img, (scaled_size, scaled_size))
-        #img = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
         x = np.asarray(img)
         images.append(x)
     return np.asarray(images)
 
+'''makes images with bounding boxes
+and stores them to box_images folder'''
 def box_images(labels, images):
     j = 0
     for i in images:
@@ -84,16 +88,21 @@ def box_images(labels, images):
         cv.imwrite("dataset/GENKI-R2009a/box_images/"+str(j)+".jpg", i)
         j = j + 1
         
-        
-
-
+'reads images and labels'
 def read_data(face_path, smile_path, scaled_size, user):
+    'read face labels'
     face_labels = read_labels(face_path, "f")
+    'scale them to new image size'
     fix_labels(face_labels, scaled_size, user)
+    'transform them for'
     face_labels = transform_labels(face_labels)
+    'read boxed images'
     images = read_images(user, scaled_size, "b")
+    'read non boxed images'
     images_original = read_images(user, scaled_size,"o")
+    'uncomment to make new boxed images if needed'
     #box_images(face_labels, images, scaled_size)
+    'read smile labels'
     smile_labels = read_labels(smile_path, "s")
     
     return images, images_original, face_labels, smile_labels
