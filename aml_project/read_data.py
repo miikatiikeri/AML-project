@@ -16,7 +16,7 @@ def read_labels(y_path, type, scaled_size, user):
     elif(type == 'f'):
         for d in data:
             y.append([int(d.split(" ")[0]), int(d.split(" ")[1]), int(d.split(" ")[2])])
-        #fix_labels(y, scaled_size, user)
+        fix_labels(y, scaled_size, user)
     return y
 
 #fixes the label scaling
@@ -37,7 +37,7 @@ def fix_labels(labels, scaled_size, user):
         labels[i][2] = int(labels[i][2] * box_ratio)
         i = i + 1
 
-def read_images(user):
+def read_images(user, scaled_size):
     images = list()
     if (platform.system() == "Linux" or "Darwin") and user != True:
         dir = "../dataset/GENKI-R2009a/Subsets/GENKI-SZSL/files/"
@@ -45,13 +45,14 @@ def read_images(user):
         dir = "dataset/GENKI-R2009a/Subsets/GENKI-SZSL/files/"
     for i in sorted(os.listdir(dir)):
         img = cv.imread(os.path.join(dir, i))
+        img = cv.resize(img, (scaled_size, scaled_size))
         images.append(img)
     return images
 
-def read_data(image_path, face_path, smile_path, scaled_size, normalize, user):
+def read_data(face_path, smile_path, scaled_size, normalize, user):
     face_labels = read_labels(face_path, "f", scaled_size, user)
     smile_labels = read_labels(smile_path, "s", scaled_size, user)
-    images = read_images(user)
+    images = read_images(user, scaled_size)
     #normalize images
     # if(normalize):
     #     for images, labels in data:

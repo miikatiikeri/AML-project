@@ -2,6 +2,7 @@ import tensorflow as tf
 from tensorflow import keras
 import numpy as np
 
+
 def split_data(data):
     train_ds, test_ds = tf.keras.utils.split_dataset(
             data, left_size=0.8, seed=1
