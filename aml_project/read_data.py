@@ -16,7 +16,7 @@ def read_labels(y_path, type, scaled_size, user):
     elif(type == 'f'):
         for d in data:
             y.append([int(d.split(" ")[0]), int(d.split(" ")[1]), int(d.split(" ")[2])])
-        fix_labels(y, scaled_size, user)
+        #fix_labels(y, scaled_size, user)
     return y
 
 #fixes the label scaling
@@ -37,34 +37,24 @@ def fix_labels(labels, scaled_size, user):
         labels[i][2] = int(labels[i][2] * box_ratio)
         i = i + 1
 
-
+def read_images(user):
+    images = list()
+    if (platform.system() == "Linux" or "Darwin") and user != True:
+        dir = "../dataset/GENKI-R2009a/Subsets/GENKI-SZSL/files/"
+    else:
+        dir = "dataset/GENKI-R2009a/Subsets/GENKI-SZSL/files/"
+    for i in sorted(os.listdir(dir)):
+        img = cv.imread(os.path.join(dir, i))
+        images.append(img)
+    return images
 
 def read_data(image_path, face_path, smile_path, scaled_size, normalize, user):
     face_labels = read_labels(face_path, "f", scaled_size, user)
     smile_labels = read_labels(smile_path, "s", scaled_size, user)
-    X = list()
-    data = keras.utils.image_dataset_from_directory(
-        image_path,
-        labels = None,
-        label_mode = 'int',
-        class_names = None,
-        color_mode = 'rgb',
-        batch_size = 32,
-        image_size = [scaled_size, scaled_size],
-        shuffle = True,
-        seed = 1,
-        validation_split = None,
-        interpolation = 'bilinear',
-        follow_links = False,
-        crop_to_aspect_ratio = False
-    )
-    img = list()
-    for images in data:
-        for i in images:
-            img.append(i)
+    images = read_images(user)
     #normalize images
     # if(normalize):
     #     for images, labels in data:
     #         for im in images:
     #             im = im /255
-    return img, face_labels, smile_labels
+    return images, face_labels, smile_labels

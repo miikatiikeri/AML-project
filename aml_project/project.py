@@ -13,13 +13,13 @@ import cnn_model
 # global variables
 # determines the size that images get scaled in read_data
 # labels also get scaled accordingly
-scaled_size = 32
+scaled_size = 180
 # Normalizing images takes some time, set this to true when training model, otherwise keep false
 normalize = True
 # number of epochs for training, set higher when actually training model
 n_epochs = 3
 # quick fix for dataread
-user = False
+user = True
 
 
 def main():  # pragma: no cover
@@ -44,9 +44,9 @@ def main():  # pragma: no cover
                         scaled_size, normalize, user)
     
     # visualize data
-    #plotting.plot_pixels(data_smile)
-    # plotting.plot_smile(data_smile)
-    # plotting.plot_face(data_face)
+    #plotting.plot_pixels(images)
+    plotting.plot_face(images, face_labels, smile_labels)
+
 
     # split dataset here or in training? always use set seeds
     # moved data splitting to different function in cnn_model
