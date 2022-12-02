@@ -92,16 +92,22 @@ def box_images(labels, images):
 def read_data(face_path, smile_path, scaled_size, user):
     'read face labels'
     face_labels = read_labels(face_path, "f")
+    
     'scale them to new image size'
     fix_labels(face_labels, scaled_size, user)
+    
     'transform them for'
     face_labels = transform_labels(face_labels)
-    'read boxed images'
-    images = read_images(user, scaled_size, "b")
+    
     'read non boxed images'
     images_original = read_images(user, scaled_size,"o")
+    
     'uncomment to make new boxed images if needed'
-    #box_images(face_labels, images, scaled_size)
+    #box_images(face_labels, images_original)
+    
+    'read boxed images'
+    images = read_images(user, scaled_size, "b")
+    
     'read smile labels'
     smile_labels = read_labels(smile_path, "s")
     
