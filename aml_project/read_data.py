@@ -3,19 +3,28 @@ from tensorflow import keras
 import os
 import cv2 as cv
 import platform
+import numpy as np
 
 def read_labels(y_path, type, scaled_size, user):
-    y = list()
+    
+    #y = list()
     #read labels
     data = open(y_path, 'r').read().splitlines()
     #read smile labels
+    i = 0
     if(type == 's'):
+        y = np.empty((3500,1))
         for d in data:
-            y.append(int(d.split(" ")[0]))
+            y[i] = int(d.split(" ")[0])
+            #y.append(int(d.split(" ")[0]))
+            i = i+1
     #read face labels
     elif(type == 'f'):
+        y = np.empty((3500,3))
         for d in data:
-            y.append([int(d.split(" ")[0]), int(d.split(" ")[1]), int(d.split(" ")[2])])
+            y[i] = [int(d.split(" ")[0]), int(d.split(" ")[1]), int(d.split(" ")[2])]
+            #y.append([int(d.split(" ")[0]), int(d.split(" ")[1]), int(d.split(" ")[2])])
+            i = i+1
         fix_labels(y, scaled_size, user)
     return y
 
@@ -46,6 +55,7 @@ def read_images(user, scaled_size):
     for i in sorted(os.listdir(dir)):
         img = cv.imread(os.path.join(dir, i))
         img = cv.resize(img, (scaled_size, scaled_size))
+        img = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
         images.append(img)
     return images
 

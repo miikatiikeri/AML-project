@@ -6,8 +6,8 @@ from tensorflow import keras
 import platform
 
 # project imports
-from read_data import read_data, read_labels
-import plotting;
+from read_data import read_data
+import plotting
 import cnn_model
 
 # global variables
@@ -19,7 +19,7 @@ normalize = True
 # number of epochs for training, set higher when actually training model
 n_epochs = 3
 # quick fix for dataread
-user = True
+user = False
 
 
 def main():  # pragma: no cover
@@ -58,7 +58,7 @@ def main():  # pragma: no cover
     #smile_model = keras.models.load_model("smile_model", compile=True)
 
     #multi task model
-    #cnn_model.multi_task_model(train_ds, test_ds, train_smile_ds, test_smile_ds, scaled_size, n_epochs)
+    cnn_model.multi_task_model(images_train, images_test, face_train, face_test, smile_train, smile_test, scaled_size, n_epochs)
     # predict test data
     #print(test_ds)
     #print(test_smile_ds)

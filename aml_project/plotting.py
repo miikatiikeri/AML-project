@@ -18,13 +18,11 @@ def plot_pixels(images):
     fig, axs = plt.subplots(3, 2, figsize=(10, 10))
     for i in range(3):
         im = images[i]
-        im_gray = cv.cvtColor(im, cv.COLOR_BGR2GRAY)
-        fig1 = axs[i,0].matshow(im_gray, cmap = 'rainbow')
+        fig1 = axs[i,0].matshow(im, cmap = 'rainbow')
         axs[i,0].axis("off")
         fig.colorbar(fig1, ax = axs[i,0])
-        new_im = images[i].numpy().astype("float32") / 255.0
-        new_im_gray = cv.cvtColor(new_im, cv.COLOR_BGR2GRAY)
-        fig2 = axs[i,1].matshow(new_im_gray, cmap = 'rainbow')
+        new_im = images[i]/ 255.0
+        fig2 = axs[i,1].matshow(new_im, cmap = 'rainbow')
         axs[i,1].axis("off")
         fig.colorbar(fig2, ax = axs[i,1])
     fig.suptitle("Greyscale pixel values before and after standardization")
