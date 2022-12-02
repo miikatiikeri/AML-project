@@ -28,29 +28,6 @@ def predict(model, test_ds, test_smile_ds):
     .format(class_names[np.argmax(score_smile)], 100 * np.max(score_smile))
     )
 
-def smile_model(train_smile_ds, test_smile_ds, n_epochs):
-    num_classes = 2
-    model = keras.Sequential([
-        keras.layers.Conv2D(32, 3, activation='relu'),
-        keras.layers.MaxPooling2D(),
-        keras.layers.Conv2D(32, 3, activation='relu'),
-        keras.layers.MaxPooling2D(),
-        keras.layers.Conv2D(32, 3, activation='relu'),
-        keras.layers.MaxPooling2D(),
-        keras.layers.Flatten(),
-        keras.layers.Dense(128, activation='relu'),
-        keras.layers.Dense(num_classes)
-    ])
-    #compile model
-    model.compile(optimizer='adam',
-              loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),
-              metrics=['accuracy'])
-
-    #train model
-    model.fit(train_smile_ds, 
-                    validation_data=(test_smile_ds), epochs = n_epochs)
-    
-    model.save("smile_model")
 
 def multi_task_model(images_train, images_test, face_train, face_test, smile_train, smile_test, scaled_size, n_epochs):
 
@@ -79,7 +56,7 @@ def multi_task_model(images_train, images_test, face_train, face_test, smile_tra
     model = keras.Model(input_layer, outputs=[smile_model, face_model])
 
 
-    losses = {"cl_head":tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True), "bb_head":tf.keras.losses.MSE}
+    losses = {"sm_head":tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True), "fm_head":tf.keras.losses.MSE}
 
     model.compile(loss = losses, optimizer = 'Adam', metrics=['accuracy'])
 
@@ -93,6 +70,5 @@ def multi_task_model(images_train, images_test, face_train, face_test, smile_tra
     }
 
     model.fit(images_train, trainTargets, validation_data = (images_test, testTargets), batch_size = 4, epochs = n_epochs, shuffle = True, verbose = 1)
-    #history = model.fit(train_sets, validation_data = test_sets, batch_size = 4, epochs = n_epochs, shuffle = True, verbose = 1)
-
+    model.save("cnn_model")
 

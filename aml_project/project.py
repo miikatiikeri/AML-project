@@ -2,7 +2,6 @@
 import matplotlib.pyplot as plt
 import tensorflow as tf
 from tensorflow import keras
-
 import platform
 
 # project imports
@@ -19,7 +18,7 @@ normalize = True
 # number of epochs for training, set higher when actually training model
 n_epochs = 3
 # quick fix for dataread
-user = False
+user = True
 
 
 def main():  # pragma: no cover
