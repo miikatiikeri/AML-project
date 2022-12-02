@@ -41,8 +41,11 @@ def plot_face(images, smile_labels):
 def plot_prediction(prediction,image, sz):
     smiling = prediction[0][0]
     face = prediction[1][0]
-    start = (int(face[0] * sz),int(face[3] * sz))
-    end = (int(face[1] * sz),int(face[2] * sz))
+    'modify s to scale the boxes'
+    s = 15
+    'xmin, xmax, ymin, ymax'
+    start = (int(face[0] * sz - sz/s), int(face[3] * sz + sz/s))
+    end = (int(face[1] * sz + sz/s),int(face[2] * sz - sz/s))
     cv.rectangle(image, start, end,(244,0,0),1)
     im = cv.cvtColor(image, cv.COLOR_BGR2RGB)
     plt.imshow(im)
