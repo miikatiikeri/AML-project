@@ -23,24 +23,19 @@ def main():  # pragma: no cover
     'platform detection to fix read issues between os'
     if (platform.system() == "Linux" or "Darwin") and user != True:
       print("using unix read")
-      images, face_labels, smile_labels = read_data(
+      images,images_original, face_labels, smile_labels = read_data(
                         "../dataset/GENKI-R2009a/Subsets/GENKI-SZSL/GENKI-SZSL_labels.txt",
                         "../dataset/GENKI-R2009a/Subsets/GENKI-SZSL/smile_labels.txt",
                         scaled_size, user)
     else:
       print("using windows read")
-      # read data and labels s for smile, f for face
-      # smile_labels contains images and labels, labels are in array where N:th label corresponds to N:th image
-      # 1 = smiling, 0 = not smiling
-      # face_labels contains images and labels, labels are in array where N:th label corresponds to N:th image
-      # each indice in labels contains subarray where l[i][0] = x cordinate of center of face, l[i][1] = y cordinate of center of face, l[i][2] = box size
       images, images_original, face_labels, smile_labels = read_data(
                         "dataset/GENKI-R2009a/Subsets/GENKI-SZSL/GENKI-SZSL_labels.txt",
                         "dataset/GENKI-R2009a/Subsets/GENKI-SZSL/smile_labels.txt", 
                         scaled_size, user)
     
     'visualize data, uncomment to plot'
-    #plotting.plot_pixels(images)
+    #plotting.plot_pixels(images_original)
     #plotting.plot_face(images, face_labels, smile_labels)
    
     'split data to train and test sets'
