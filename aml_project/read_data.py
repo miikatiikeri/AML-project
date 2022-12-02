@@ -46,13 +46,13 @@ def fix_labels(labels, scaled_size, user):
 
 '''calculates xmin, xmax, ymin, ymax
 from face labels'''
-def transform_labels(labels):
+def transform_labels(labels, sz):
     new_labels = []
     for i in labels:
-        xmin = int(i[0] - i[2]/2)
-        xmax = int(i[0] + i[2]/2)
-        ymin = int(i[1] - i[2]/2)
-        ymax = int(i[1] + i[2]/2)
+        xmin = ((i[0] - i[2]/2) / sz)
+        xmax = ((i[0] + i[2]/2) / sz)
+        ymin = ((i[1] - i[2]/2) / sz)
+        ymax = ((i[1] + i[2]/2) / sz)
         new_labels.append((xmin, xmax, ymin, ymax))
     return np.asarray(new_labels)
 
@@ -98,7 +98,7 @@ def read_data(face_path, smile_path, scaled_size, user):
     fix_labels(face_labels, scaled_size, user)
     
     'transform them to min max'
-    face_labels = transform_labels(face_labels)
+    face_labels = transform_labels(face_labels, scaled_size)
     
     'read non boxed images'
     images_original = read_images(user, scaled_size,"o")

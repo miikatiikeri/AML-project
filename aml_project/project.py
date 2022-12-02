@@ -57,8 +57,12 @@ def main():  # pragma: no cover
 
     'predicts random image from images_original'
     prediction, image = cnn_model.predict(model, images_original)
+    print((prediction[1][0][0]))
+    print((prediction[1][0][1]))
+    print((prediction[1][0][2]))
+    print((prediction[1][0][3]))
    
     'visualize prediction'
-    plotting.plot_prediction(prediction,image)
+    plotting.plot_prediction(prediction,image, scaled_size)
 
     # grad-cam or lime?
