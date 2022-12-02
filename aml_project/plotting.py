@@ -4,7 +4,7 @@ import tensorflow as tf
 import cv2 as cv
 import random
 
-#plots pixel values before and after standardization
+'displays heatmap over images showing pixel values before and after normalisation'
 def plot_pixels(images):
     fig, axs = plt.subplots(3, 2, figsize=(10, 10))
     for i in range(3):
@@ -20,24 +20,23 @@ def plot_pixels(images):
     fig.suptitle("Greyscale pixel values before and after standardization")
     plt.show()
         
-
-# def plot_face(images, face_labels, smile_labels):
-#     plt.figure(figsize=(10, 10))
-#     plt.suptitle("Example of Genki-szsl dataset")
-#     random.seed(1)
-#     for i in range(9):
-#         r = random.randint(1,1000)
-#         ax = plt.subplot(3, 3, i + 1)
-#         plt.imshow(images[r])
-#         size = face_labels[r][2]
-#         x, y = fix_cord(face_labels[r][0],face_labels[r][1], size)
-#         ax.add_patch(Rectangle((x, y), size, size, linewidth=1, edgecolor='r', facecolor='none'))
-#         if smile_labels[r] == 1:
-#             ax.set_title("smiling")
-#         else:
-#             ax.set_title("not smiling")
-#         plt.axis("off")
-#     plt.show()
+'plot faces with their corresponding labels'
+def plot_face(images, smile_labels):
+    plt.figure(figsize=(10, 10))
+    plt.suptitle("Example of Genki-szsl dataset")
+    arr = [3, 9, 17, 18, 19, 20, 21, 22, 23]
+    j = 0
+    for i in arr:
+        ax = plt.subplot(3, 3, j+ 1)
+        im = cv.cvtColor(images[i], cv.COLOR_BGR2RGB)
+        plt.imshow(im)
+        if smile_labels[i] == 1:
+            ax.set_title("smiling")
+        else:
+            ax.set_title("not smiling")
+        plt.axis("off")
+        j = j + 1
+    plt.show()
 
 def ev_model(face):
     plt.plot(face.face['accuracy'], label='accuracy')

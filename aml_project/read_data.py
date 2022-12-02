@@ -85,7 +85,8 @@ def box_images(labels, images):
     for i in images:
         print(labels[0])
         i = cv.rectangle(i,(labels[j][0],labels[j][3]),(labels[j][1],labels[j][2]),(244,0,0),3)
-        cv.imwrite("dataset/GENKI-R2009a/box_images/"+str(j)+".jpg", i)
+        txt = "{id: 06d}"
+        cv.imwrite("dataset/GENKI-R2009a/box_images/"+txt.format(id=j)+".jpg", i)
         j = j + 1
         
 'reads images and labels'

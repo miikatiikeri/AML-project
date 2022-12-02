@@ -21,6 +21,10 @@ user = True
 def main():  # pragma: no cover
 
     'platform detection to fix read issues between os'
+    '''images contains new images with boxes drawn on them
+    images original contains the original images
+    face_labels contains (xmin, xmax, ymin, ymax) values of each box
+    smile_labels contains 1 if person in image is smiling, 0 if not'''
     if (platform.system() == "Linux" or "Darwin") and user != True:
       print("using unix read")
       images,images_original, face_labels, smile_labels = read_data(
@@ -35,8 +39,10 @@ def main():  # pragma: no cover
                         scaled_size, user)
     
     'visualize data, uncomment to plot'
+    'uncomment to show pixel values before and after normalization'
     #plotting.plot_pixels(images_original)
-    #plotting.plot_face(images, face_labels, smile_labels)
+    'uncomment to show example set of labels and bounding boxes'
+    #plotting.plot_face(images, smile_labels)
    
     'split data to train and test sets'
     images_train, images_test = cnn_model.split_data(images)
@@ -44,7 +50,7 @@ def main():  # pragma: no cover
     smile_train, smile_test = cnn_model.split_data(smile_labels)
 
     'uncomment to train multitask model'
-    #cnn_model.multi_task_model(images_train, images_test, face_train, face_test, smile_train, smile_test, scaled_size, n_epochs)
+    cnn_model.multi_task_model(images_train, images_test, face_train, face_test, smile_train, smile_test, scaled_size, n_epochs)
     
     'load saved model'
     model = keras.models.load_model("cnn_model", compile=True)
