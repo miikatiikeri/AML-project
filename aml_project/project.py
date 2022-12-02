@@ -16,7 +16,7 @@ scaled_size = 180
 # Normalizing images takes some time, set this to true when training model, otherwise keep false
 normalize = True
 # number of epochs for training, set higher when actually training model
-n_epochs = 1
+n_epochs = 100
 # quick fix for dataread
 user = True
 
@@ -51,14 +51,10 @@ def main():  # pragma: no cover
     face_train, face_test = cnn_model.split_data(face_labels)
     smile_train, smile_test = cnn_model.split_data(smile_labels)
     #multi task model
-    cnn_model.multi_task_model(images_train, images_test, face_train, face_test, smile_train, smile_test, scaled_size, n_epochs)
+    #cnn_model.multi_task_model(images_train, images_test, face_train, face_test, smile_train, smile_test, scaled_size, n_epochs)
     #load model
     model = keras.models.load_model("cnn_model", compile=True)
-    img_array = tf.expand_dims(images_original[3000],0)
-    predict = model.predict(img_array)
-    plt.imshow(images_original[3000])
-    plt.show()
-    print(predict)
+  
 
     # predict test data
     #print(test_ds)
