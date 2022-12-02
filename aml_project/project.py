@@ -8,7 +8,7 @@ import platform
 # project imports
 from read_data import read_data, read_labels
 import plotting;
-
+import labels
 import cnn_model
 # global variables
 # determines the size that images get scaled in read_data
@@ -50,8 +50,8 @@ def main():  # pragma: no cover
 
     # split dataset here or in training? always use set seeds
     # moved data splitting to different function in cnn_model
-    train_ds, test_ds = cnn_model.split_data(data_face)
-    train_smile_ds, test_smile_ds = cnn_model.split_data(data_smile)
+    #train_ds, test_ds = cnn_model.split_data(data_face)
+    #train_smile_ds, test_smile_ds = cnn_model.split_data(data_smile)
    
     # smile detection model
     #cnn_model.smile_model(train_smile_ds, test_smile_ds, n_epochs)
@@ -59,10 +59,10 @@ def main():  # pragma: no cover
     #smile_model = keras.models.load_model("smile_model", compile=True)
 
     #multi task model
-    cnn_model.multi_task_model(train_ds, test_ds, train_smile_ds, test_smile_ds, scaled_size,n_epochs)
+    #cnn_model.multi_task_model(train_ds, test_ds, train_smile_ds, test_smile_ds, scaled_size,n_epochs)
     # predict test data
-    print(test_ds)
-    print(test_smile_ds)
+    #print(test_ds)
+    #print(test_smile_ds)
 
     #predict code here
     #cnn_model.predict(model, test_ds, test_smile_ds)

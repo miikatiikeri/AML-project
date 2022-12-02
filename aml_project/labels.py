@@ -3,14 +3,15 @@ import cv2 as cv
 import matplotlib.pyplot as plt
 import numpy
 import matplotlib.image as mpimg
-
+#320
+#2318
 def labels():
-    dir = "dataset/GENKI-R2009a/Subsets/GENKI-SZSL/files/"
+    dir = "/home/anttiy/Lipasto/AML/AML-project/dataset/GENKI-R2009a/GENKI-SZSL/files"
     i = 0
     f = open("smile_labels.txt2", 'w')
     for image in sorted(os.listdir(dir)):
         i = i +1
-        if i >= 320:
+        if i >= 2318:
             im = mpimg.imread(os.path.join(dir, image))
             imgplot = plt.imshow(im)
             plt.show()
