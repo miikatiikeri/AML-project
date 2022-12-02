@@ -19,7 +19,7 @@ normalize = True
 # number of epochs for training, set higher when actually training model
 n_epochs = 3
 # quick fix for dataread
-user = True
+user = False
 
 
 def main():  # pragma: no cover
@@ -45,7 +45,7 @@ def main():  # pragma: no cover
     
     # visualize data
     #plotting.plot_pixels(images)
-    plotting.plot_face(images, face_labels, smile_labels)
+    #plotting.plot_face(images, face_labels, smile_labels)
 
 
     # split dataset here or in training? always use set seeds
