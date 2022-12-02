@@ -38,6 +38,19 @@ def plot_face(images, smile_labels):
         j = j + 1
     plt.show()
 
+def plot_prediction(prediction,image):
+    smiling = prediction[0][0]
+    face = prediction[1][0]
+    img = cv.rectangle(image,(int(face[0]),int(face[3])),(int(face[1]),int(face[2])),(244,0,0),3)
+    img = cv.cvtColor(img, cv.COLOR_BGR2RGB)
+    plt.imshow(img)
+    if(smiling[0] > smiling[1]):
+        plt.title("not smiling")
+    else:
+        plt.title("smiling")
+    plt.show()
+    
+
 def ev_model(face):
     plt.plot(face.face['accuracy'], label='accuracy')
     plt.plot(face.face['val_accuracy'], label='val_accuracy')

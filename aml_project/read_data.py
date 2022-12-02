@@ -97,7 +97,7 @@ def read_data(face_path, smile_path, scaled_size, user):
     'scale them to new image size'
     fix_labels(face_labels, scaled_size, user)
     
-    'transform them for'
+    'transform them to min max'
     face_labels = transform_labels(face_labels)
     
     'read non boxed images'

@@ -4,6 +4,7 @@ import numpy as np
 from tensorflow import keras
 from tensorflow.keras import layers
 from tensorflow.keras.models import Sequential
+import random
 
 
 'split data to test and train sets'
@@ -15,23 +16,9 @@ def split_data(data):
     return train_ds, test_ds
 
 'predict results from image'
-def predict(model, image):
-    # TODO fix predicting
-    prediction_face = model.predict(test_ds)
-    prediction_smile = model.predict(test_smile_ds)
-
-    score_face = tf.nn.softmax(prediction_face[0])
-    score_smile = tf.nn.softmax(prediction_smile[0])
-
-    print(
-    "This image most likely belongs to {} with a {:.2f} percent confidence."
-    .format(class_names[np.argmax(score_face)], 100 * np.max(score_face))
-    )
-
-    print(
-    "This image most likely belongs to {} with a {:.2f} percent confidence."
-    .format(class_names[np.argmax(score_smile)], 100 * np.max(score_smile))
-    )
+def predict(model, images):
+    x = random.randint(1,3500)
+    return model.predict(np.expand_dims(images[x], axis=0)), images[x]
 
 'model architecture and training'
 def multi_task_model(images_train, images_test, face_train, face_test, smile_train, smile_test, scaled_size, n_epochs):
@@ -56,7 +43,7 @@ def multi_task_model(images_train, images_test, face_train, face_test, smile_tra
     face_model = keras.layers.Dense(128, activation = 'relu', name = 'fm1')(base_model)
     face_model = keras.layers.Dense(64, activation = 'relu', name = 'fm2')(face_model)
     face_model = keras.layers.Dense(32, activation = 'relu', name = 'fm3')(face_model)
-    face_model = keras.layers.Dense(4, name = 'fm_head')(face_model)
+    face_model = keras.layers.Dense(4, activation='sigmoid', name = 'fm_head')(face_model)
 
     'model structure'
     model = keras.Model(input_layer, outputs=[smile_model, face_model])

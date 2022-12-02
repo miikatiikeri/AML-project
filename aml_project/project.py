@@ -50,20 +50,15 @@ def main():  # pragma: no cover
     smile_train, smile_test = cnn_model.split_data(smile_labels)
 
     'uncomment to train multitask model'
-    cnn_model.multi_task_model(images_train, images_test, face_train, face_test, smile_train, smile_test, scaled_size, n_epochs)
+    #cnn_model.multi_task_model(images_train, images_test, face_train, face_test, smile_train, smile_test, scaled_size, n_epochs)
     
     'load saved model'
     model = keras.models.load_model("cnn_model", compile=True)
-  
 
-    # predict test data
-    #print(test_ds)
-    #print(test_smile_ds)
-
-    #predict code here
-    #cnn_model.predict(model, test_ds, test_smile_ds)
-    
-    # visualize results
-
+    'predicts random image from images_original'
+    prediction, image = cnn_model.predict(model, images_original)
+   
+    'visualize prediction'
+    plotting.plot_prediction(prediction,image)
 
     # grad-cam or lime?
