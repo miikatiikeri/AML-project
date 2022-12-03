@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 import tensorflow as tf
 from tensorflow import keras
 import platform
+import numpy as np
 
 # project imports
 from read_data import read_data
@@ -55,6 +56,8 @@ def main():  # pragma: no cover
     'load saved model'
     model = keras.models.load_model("cnn_model", compile=True)
 
+    model.summary()
+
     'predicts random image from images_original'
     prediction, image = cnn_model.predict(model, images_original)
    
@@ -62,3 +65,14 @@ def main():  # pragma: no cover
     plotting.plot_prediction(prediction,image, scaled_size)
 
     # grad-cam or lime?
+
+    last_conv_layer_name = "fm_head"
+
+    image_array = keras.preprocessing.image.img_to_array(image)
+    image_array = np.expand_dims(image_array, axis=0)
+    
+    heatmap = plotting.make_gradcam_heatmap(image_array, model, last_conv_layer_name)
+    plt.matshow(heatmap)
+    plt.show()
+
+    

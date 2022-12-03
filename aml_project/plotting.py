@@ -3,6 +3,7 @@ from matplotlib.patches import Rectangle
 import tensorflow as tf
 import cv2 as cv
 import random
+import numpy as np
 
 'displays heatmap over images showing pixel values before and after normalisation'
 def plot_pixels(images):
@@ -64,3 +65,27 @@ def ev_model(face):
     plt.ylim([0.5, 1])
     plt.legend(loc='lower right')
     plt.show()
+
+def make_gradcam_heatmap(img_array, model, last_conv_layer_name, pred_index=None):
+    grad_model = tf.keras.models.Model(
+        [model.inputs], [model.get_layer(last_conv_layer_name).output, model.output]
+    )
+
+
+    # TODO error here!
+    with tf.GradientTape() as tape:
+        last_conv_layer_output, preds = grad_model(img_array)
+        if pred_index is None:
+            pred_index = np.array(tf.argmax(preds[0]))
+        class_channel = preds([:][pred_index])
+
+    grads = tape.gradient(class_channel, last_conv_layer_output)
+
+    pooled_grads = tf.reduce_mean(grads, axis=(0, 1, 2))
+
+    last_conv_layer_output = last_conv_layer_output[0]
+    heatmap = last_conv_layer_output @ pooled_grads[..., tf.newaxis]
+    heatmap = tf.squeeze(heatmap)
+
+    heatmap = tf.maximum(heatmap, 0) / tf.math.reduce_max(heatmap)
+    return heatmap.numpy()
